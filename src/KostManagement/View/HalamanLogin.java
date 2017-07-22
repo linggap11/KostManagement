@@ -44,6 +44,14 @@ public class HalamanLogin extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JSeparator();
         jSeparator3 = new javax.swing.JSeparator();
         jLabel13 = new javax.swing.JLabel();
+        jPanel9 = new javax.swing.JPanel();
+        jLabel32 = new javax.swing.JLabel();
+        jSeparator8 = new javax.swing.JSeparator();
+        jLabel33 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        logokostan = new javax.swing.JLabel();
+        jSeparator9 = new javax.swing.JSeparator();
+        jLabel12 = new javax.swing.JLabel();
         panelKanan = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -101,6 +109,35 @@ public class HalamanLogin extends javax.swing.JFrame {
         jLabel13.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
         jLabel13.setForeground(new java.awt.Color(255, 255, 255));
         panelKiri.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, 30));
+
+        jPanel9.setBackground(new java.awt.Color(0, 150, 136));
+        jPanel9.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel32.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel32.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel32.setText("Transaksi Terakhir Pada");
+        jPanel9.add(jLabel32, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 100, -1, -1));
+        jPanel9.add(jSeparator8, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 80, 150, 10));
+
+        jLabel33.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel33.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel33.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jPanel9.add(jLabel33, new org.netbeans.lib.awtextra.AbsoluteConstraints(261, 58, 210, 20));
+
+        jLabel11.setFont(new java.awt.Font("Hobo Std", 1, 22)); // NOI18N
+        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel11.setText("KOST Ibu Tuti");
+        jPanel9.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 50, 170, -1));
+
+        logokostan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/DataGambar/icons8_Home_52px_3.png"))); // NOI18N
+        jPanel9.add(logokostan, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 50, 60, 50));
+        jPanel9.add(jSeparator9, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 120, 120, 20));
+
+        jLabel12.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel12.setText("Jl. Kenangan No. 29 Bandung Tlp (022) - 2126453 ");
+        jPanel9.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 90, -1, -1));
+
+        panelKiri.add(jPanel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, 400, 130));
 
         mainLogin.add(panelKiri, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 420, 550));
 
@@ -341,19 +378,27 @@ public class HalamanLogin extends javax.swing.JFrame {
     private javax.swing.JLabel btnLogin;
     private javax.swing.JCheckBox jCheckBoxTampilPassword;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel32;
+    private javax.swing.JLabel jLabel33;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
     private javax.swing.JSeparator jSeparator5;
+    private javax.swing.JSeparator jSeparator8;
+    private javax.swing.JSeparator jSeparator9;
     private javax.swing.JPanel loader;
+    private javax.swing.JLabel logokostan;
     private javax.swing.JPanel mainLogin;
     private javax.swing.JPanel panelKanan;
     private javax.swing.JPanel panelKiri;

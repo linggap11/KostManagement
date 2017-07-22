@@ -453,7 +453,7 @@ public class HalamanUtama extends javax.swing.JFrame {
         jLabel32.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel32.setForeground(new java.awt.Color(255, 255, 255));
         jLabel32.setText("Transaksi Terakhir Pada");
-        jPanel9.add(jLabel32, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 100, -1, -1));
+        jPanel9.add(jLabel32, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 100, -1, -1));
         jPanel9.add(jSeparator8, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 80, 150, 10));
 
         jLabel33.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
