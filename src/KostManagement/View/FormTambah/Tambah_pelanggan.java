@@ -27,6 +27,8 @@ public class Tambah_pelanggan extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        Close = new javax.swing.JLabel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
         addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
@@ -40,24 +42,38 @@ public class Tambah_pelanggan extends javax.swing.JFrame {
             }
         });
 
+        Close.setForeground(new java.awt.Color(255, 255, 255));
+        Close.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        Close.setIcon(new javax.swing.ImageIcon(getClass().getResource("/DataGambar/icons8_Delete_15px.png"))); // NOI18N
+        Close.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Close.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                CloseMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 359, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 344, Short.MAX_VALUE)
+                .addComponent(Close))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 330, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(Close, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 310, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-int xx;
-int xy;
+    int xx;
+    int xy;
     private void formMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseDragged
         // TODO add your handling code here:
-         int x = evt.getXOnScreen();
+        int x = evt.getXOnScreen();
         int y = evt.getYOnScreen();
         this.setLocation(x - xx, y - xy);
     }//GEN-LAST:event_formMouseDragged
@@ -67,6 +83,11 @@ int xy;
         xx = evt.getX();
         xy = evt.getY();
     }//GEN-LAST:event_formMousePressed
+
+    private void CloseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CloseMouseClicked
+        setVisible(false);
+
+    }//GEN-LAST:event_CloseMouseClicked
 
     /**
      * @param args the command line arguments
@@ -104,5 +125,6 @@ int xy;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel Close;
     // End of variables declaration//GEN-END:variables
 }

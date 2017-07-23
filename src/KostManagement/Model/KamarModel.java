@@ -38,4 +38,25 @@ public class KamarModel {
         
         return kodeKamar;
     }
+    
+    public String[] setNotifikasi() {
+         String[] ket = new String[100];
+        int i = 0;
+        try {
+            KoneksiDB koneksi = new KoneksiDB();
+            Connection conn = koneksi.getKoneksi();
+            Statement stt = (Statement) conn.createStatement();
+            String sql = "SELECT * FROM t_kamar WHERE tgl_habis BETWEEN NOW() AND DATE_ADD(NOW(), INTERVAL 7 DAY)";
+            ResultSet result = stt.executeQuery(sql);
+            while (result.next()) {                
+                String kdKamar = result.getString("kd_kamar");
+                ket[i] = kdKamar;
+                i++;
+            }    
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+        return ket;
+    }
+    
 }

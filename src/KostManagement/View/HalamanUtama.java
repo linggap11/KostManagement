@@ -5,7 +5,16 @@
  */
 package KostManagement.View;
 
+import KostManagement.Controller.KamarController;
+import KostManagement.Controller.PelangganController;
+import KostManagement.Controller.TransaksiController;
+import KostManagement.KoneksiDB;
+import KostManagement.Model.KamarModel;
+import KostManagement.Model.TransaksiModel;
 import KostManagement.View.FormTambah.Tambah_pelanggan;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 /**
  *
@@ -23,6 +32,8 @@ public class HalamanUtama extends javax.swing.JFrame {
         kamarPanel.hide();
         fasilitasPanel.hide();
         transaksiPanel.hide();
+        
+        tampilDataTransaksiTerakhir();
     }
 
     /**
@@ -56,7 +67,7 @@ public class HalamanUtama extends javax.swing.JFrame {
         jLabel14 = new javax.swing.JLabel();
         halamanUtamaPanel = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tabelTransaksi1 = new javax.swing.JTable();
         Close = new javax.swing.JLabel();
         notifikasi = new javax.swing.JPanel();
         jScrollPane6 = new javax.swing.JScrollPane();
@@ -71,6 +82,7 @@ public class HalamanUtama extends javax.swing.JFrame {
         logokostan = new javax.swing.JLabel();
         jSeparator9 = new javax.swing.JSeparator();
         jLabel12 = new javax.swing.JLabel();
+        tglTerakhir = new javax.swing.JLabel();
         pelangganPanel = new javax.swing.JPanel();
         Close1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
@@ -80,7 +92,7 @@ public class HalamanUtama extends javax.swing.JFrame {
         jLabel21 = new javax.swing.JLabel();
         logokostan5 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tabelPelanggan = new javax.swing.JTable();
         jLabel15 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         jLabel38 = new javax.swing.JLabel();
@@ -97,7 +109,7 @@ public class HalamanUtama extends javax.swing.JFrame {
         jLabel24 = new javax.swing.JLabel();
         logokostan6 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable3 = new javax.swing.JTable();
+        TableKamar2 = new javax.swing.JTable();
         jLabel16 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
         jLabel40 = new javax.swing.JLabel();
@@ -114,7 +126,7 @@ public class HalamanUtama extends javax.swing.JFrame {
         jLabel31 = new javax.swing.JLabel();
         logokostan7 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
-        jTable4 = new javax.swing.JTable();
+        tabelFasilitas = new javax.swing.JTable();
         jLabel17 = new javax.swing.JLabel();
         jTextField3 = new javax.swing.JTextField();
         jLabel41 = new javax.swing.JLabel();
@@ -131,7 +143,7 @@ public class HalamanUtama extends javax.swing.JFrame {
         jLabel36 = new javax.swing.JLabel();
         logokostan8 = new javax.swing.JLabel();
         jScrollPane5 = new javax.swing.JScrollPane();
-        jTable5 = new javax.swing.JTable();
+        tableTransaksi2 = new javax.swing.JTable();
         jLabel18 = new javax.swing.JLabel();
         jTextField4 = new javax.swing.JTextField();
         jLabel42 = new javax.swing.JLabel();
@@ -368,9 +380,9 @@ public class HalamanUtama extends javax.swing.JFrame {
 
         jScrollPane1.setBorder(null);
 
-        jTable1.setAutoCreateRowSorter(true);
-        jTable1.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tabelTransaksi1.setAutoCreateRowSorter(true);
+        tabelTransaksi1.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        tabelTransaksi1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -386,14 +398,14 @@ public class HalamanUtama extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jTable1.setGridColor(new java.awt.Color(255, 255, 255));
-        jTable1.setIntercellSpacing(new java.awt.Dimension(5, 5));
-        jTable1.setRowHeight(24);
-        jTable1.setSelectionBackground(new java.awt.Color(36, 47, 65));
-        jScrollPane1.setViewportView(jTable1);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(0).setResizable(false);
-            jTable1.getColumnModel().getColumn(0).setPreferredWidth(10);
+        tabelTransaksi1.setGridColor(new java.awt.Color(255, 255, 255));
+        tabelTransaksi1.setIntercellSpacing(new java.awt.Dimension(5, 5));
+        tabelTransaksi1.setRowHeight(24);
+        tabelTransaksi1.setSelectionBackground(new java.awt.Color(36, 47, 65));
+        jScrollPane1.setViewportView(tabelTransaksi1);
+        if (tabelTransaksi1.getColumnModel().getColumnCount() > 0) {
+            tabelTransaksi1.getColumnModel().getColumn(0).setResizable(false);
+            tabelTransaksi1.getColumnModel().getColumn(0).setPreferredWidth(10);
         }
 
         halamanUtamaPanel.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 140, 770, 160));
@@ -414,11 +426,11 @@ public class HalamanUtama extends javax.swing.JFrame {
         notif.setColumns(20);
         notif.setLineWrap(true);
         notif.setRows(5);
-        notif.setText(" - Kode kamar xxxx 3 hari lagi habis.\n - Kode kamar xxxx 3 hari lagi habis.\n - Kode kamar xxxx 3 hari lagi habis.\n - Kode kamar xxxx 3 hari lagi habis.\n");
         notif.setBorder(null);
         notif.setCaretColor(new java.awt.Color(255, 255, 255));
         jScrollPane6.setViewportView(notif);
 
+        jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 11)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(204, 0, 0));
         jLabel10.setText("Pemberitahuan ! ! !");
 
@@ -480,6 +492,12 @@ public class HalamanUtama extends javax.swing.JFrame {
         jLabel12.setText("Jl. Kenangan No. 29 Bandung Tlp (022) - 2126453 ");
         jPanel9.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 90, -1, -1));
 
+        tglTerakhir.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        tglTerakhir.setForeground(new java.awt.Color(255, 255, 255));
+        tglTerakhir.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        tglTerakhir.setText("dd/MM/yyyy");
+        jPanel9.add(tglTerakhir, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 100, 120, -1));
+
         halamanUtamaPanel.add(jPanel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 790, 130));
 
         bg.add(halamanUtamaPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 0, 790, 470));
@@ -522,8 +540,8 @@ public class HalamanUtama extends javax.swing.JFrame {
 
         pelangganPanel.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 790, 130));
 
-        jTable2.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        tabelPelanggan.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        tabelPelanggan.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -539,10 +557,10 @@ public class HalamanUtama extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane2.setViewportView(jTable2);
-        if (jTable2.getColumnModel().getColumnCount() > 0) {
-            jTable2.getColumnModel().getColumn(0).setResizable(false);
-            jTable2.getColumnModel().getColumn(0).setPreferredWidth(10);
+        jScrollPane2.setViewportView(tabelPelanggan);
+        if (tabelPelanggan.getColumnModel().getColumnCount() > 0) {
+            tabelPelanggan.getColumnModel().getColumn(0).setResizable(false);
+            tabelPelanggan.getColumnModel().getColumn(0).setPreferredWidth(10);
         }
 
         pelangganPanel.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, 770, 190));
@@ -621,8 +639,8 @@ public class HalamanUtama extends javax.swing.JFrame {
 
         kamarPanel.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 790, 130));
 
-        jTable3.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        jTable3.setModel(new javax.swing.table.DefaultTableModel(
+        TableKamar2.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        TableKamar2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -638,10 +656,10 @@ public class HalamanUtama extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane3.setViewportView(jTable3);
-        if (jTable3.getColumnModel().getColumnCount() > 0) {
-            jTable3.getColumnModel().getColumn(0).setResizable(false);
-            jTable3.getColumnModel().getColumn(0).setPreferredWidth(10);
+        jScrollPane3.setViewportView(TableKamar2);
+        if (TableKamar2.getColumnModel().getColumnCount() > 0) {
+            TableKamar2.getColumnModel().getColumn(0).setResizable(false);
+            TableKamar2.getColumnModel().getColumn(0).setPreferredWidth(10);
         }
 
         kamarPanel.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, 770, 190));
@@ -715,8 +733,8 @@ public class HalamanUtama extends javax.swing.JFrame {
 
         fasilitasPanel.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 790, 130));
 
-        jTable4.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        jTable4.setModel(new javax.swing.table.DefaultTableModel(
+        tabelFasilitas.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        tabelFasilitas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -732,10 +750,10 @@ public class HalamanUtama extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane4.setViewportView(jTable4);
-        if (jTable4.getColumnModel().getColumnCount() > 0) {
-            jTable4.getColumnModel().getColumn(0).setResizable(false);
-            jTable4.getColumnModel().getColumn(0).setPreferredWidth(10);
+        jScrollPane4.setViewportView(tabelFasilitas);
+        if (tabelFasilitas.getColumnModel().getColumnCount() > 0) {
+            tabelFasilitas.getColumnModel().getColumn(0).setResizable(false);
+            tabelFasilitas.getColumnModel().getColumn(0).setPreferredWidth(10);
         }
 
         fasilitasPanel.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, 770, 190));
@@ -809,8 +827,8 @@ public class HalamanUtama extends javax.swing.JFrame {
 
         transaksiPanel.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 790, 130));
 
-        jTable5.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        jTable5.setModel(new javax.swing.table.DefaultTableModel(
+        tableTransaksi2.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        tableTransaksi2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -826,10 +844,10 @@ public class HalamanUtama extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane5.setViewportView(jTable5);
-        if (jTable5.getColumnModel().getColumnCount() > 0) {
-            jTable5.getColumnModel().getColumn(0).setResizable(false);
-            jTable5.getColumnModel().getColumn(0).setPreferredWidth(10);
+        jScrollPane5.setViewportView(tableTransaksi2);
+        if (tableTransaksi2.getColumnModel().getColumnCount() > 0) {
+            tableTransaksi2.getColumnModel().getColumn(0).setResizable(false);
+            tableTransaksi2.getColumnModel().getColumn(0).setPreferredWidth(10);
         }
 
         transaksiPanel.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, 770, 190));
@@ -876,6 +894,27 @@ public class HalamanUtama extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    // menampilkan transaksi pada tanggal berdasarkan tanggal 
+    void tampilDataTransaksiTerakhir() {
+        TransaksiController transaksiCont = new TransaksiController();
+        TransaksiModel transaksiModel = new TransaksiModel();
+        tglTerakhir.setText(transaksiModel.setTanggalTerakhir());
+        tabelTransaksi1.setModel(transaksiCont.tampilDataTerakhir());
+        notifikasi();
+    }
+    void notifikasi() {
+        KamarModel kmrModel = new KamarModel();
+        for (String keterangan : kmrModel.setNotifikasi()) {
+            if (keterangan == null) {
+                break;
+            }
+            notif.append("Kode kamar "+keterangan+" akan segera habis !!\n");
+        }
+      
+    }
+    
+    
+    
     private void CloseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CloseMouseClicked
         System.exit(0);
     }//GEN-LAST:event_CloseMouseClicked
@@ -949,7 +988,7 @@ public class HalamanUtama extends javax.swing.JFrame {
     }//GEN-LAST:event_menu1MouseClicked
 
     private void jLabel37MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel37MouseClicked
-     new Tambah_pelanggan().setVisible(true);   // TODO add your handling code here:
+        new Tambah_pelanggan().setVisible(true);   // TODO add your handling code here:
     }//GEN-LAST:event_jLabel37MouseClicked
 
     /**
@@ -993,6 +1032,7 @@ public class HalamanUtama extends javax.swing.JFrame {
     private javax.swing.JLabel Close2;
     private javax.swing.JLabel Close3;
     private javax.swing.JLabel Close4;
+    private javax.swing.JTable TableKamar2;
     private javax.swing.JPanel bg;
     private javax.swing.JPanel fasilitasPanel;
     private javax.swing.JPanel halamanUtamaPanel;
@@ -1067,11 +1107,6 @@ public class HalamanUtama extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator13;
     private javax.swing.JSeparator jSeparator8;
     private javax.swing.JSeparator jSeparator9;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
-    private javax.swing.JTable jTable3;
-    private javax.swing.JTable jTable4;
-    private javax.swing.JTable jTable5;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
@@ -1091,6 +1126,11 @@ public class HalamanUtama extends javax.swing.JFrame {
     private javax.swing.JPanel notifikasi;
     private javax.swing.JPanel pelangganPanel;
     private javax.swing.JPanel sidePane;
+    private javax.swing.JTable tabelFasilitas;
+    private javax.swing.JTable tabelPelanggan;
+    private javax.swing.JTable tabelTransaksi1;
+    private javax.swing.JTable tableTransaksi2;
+    private javax.swing.JLabel tglTerakhir;
     private javax.swing.JPanel transaksiPanel;
     // End of variables declaration//GEN-END:variables
 }

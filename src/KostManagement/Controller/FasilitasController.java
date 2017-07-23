@@ -7,6 +7,7 @@ package KostManagement.Controller;
 
 import KostManagement.KoneksiDB;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.Statement;
 import javax.swing.table.DefaultTableModel;
 
@@ -20,7 +21,27 @@ public class FasilitasController {
     
     public DefaultTableModel tampilData() {
         DefaultTableModel model = new DefaultTableModel();
-        
+        model.addColumn("Kode Fasilitas");
+        model.addColumn("Nama");
+        model.addColumn("Biaya Tambahan");
+        model.addColumn("Stok");
+        try {
+            KoneksiDB koneksi = new KoneksiDB();
+            conn = koneksi.getKoneksi();
+            Statement stt = (Statement)conn.createStatement();
+            sql = "SELECT * FROM t_fasilitas ORDER BY `kd_fasilitas` ASC"; 
+            ResultSet result = stt.executeQuery(sql);
+            while (result.next()) {
+                model.addRow(new Object[] {
+                    result.getString(1),
+                    result.getString(2),
+                    result.getString(3),
+                    result.getString(4)
+                });
+            }
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
         return model;
     }
     

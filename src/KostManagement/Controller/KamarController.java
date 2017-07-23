@@ -24,24 +24,25 @@ public class KamarController {
     
     public DefaultTableModel tampilData() {
         DefaultTableModel model = new DefaultTableModel();
-        
+        model.addColumn("Kode Kamar");
+        model.addColumn("Luas Kamar");
+        model.addColumn("Biaya Bulanan");
         try {
             KoneksiDB koneksi = new KoneksiDB();
             conn = koneksi.getKoneksi();
             Statement stt = (Statement)conn.createStatement();
-            sql = "SELECT kd_kamar,luas_kamar,harga_bulanan FROM t_kamar ORDER BY kd_kamar ASC"; 
+            sql = "SELECT `kd_kamar`,`luas_kamar`,`harga_bulanan` FROM `t_kamar` ORDER BY kd_kamar ASC"; 
             ResultSet result = stt.executeQuery(sql);
             while (result.next()) {
                 model.addRow(new Object[] {
-                    result.getString("kd_kamar"),
-                    result.getString("luas_kamar"),
-                    result.getString("harga_bulanan")
+                    result.getString(1),
+                    result.getString(2),
+                    result.getString(3)
                 });
             }
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
-        
         return model;
     }
     
