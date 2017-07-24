@@ -61,14 +61,14 @@ public class KamarController {
         return result;
     }
     
-    public int ubahData(String kodeKamar, String luasKamar, int biayaKamar) {
+    public int ubahData(String kodeKamar, String luasKamar, String biayaKamar) {
         int result = 0;
         
         try {
             KoneksiDB koneksi = new KoneksiDB();
             conn = koneksi.getKoneksi();
             Statement stt = (Statement)conn.createStatement();
-            sql = "UPDATE FROM t_kamar SET luas_kamar = '"+luasKamar+"', harga_bulanan= '"+biayaKamar+"' WHERE kd_kamar = '"+kodeKamar+"'";
+            sql = "UPDATE FROM t_kamar SET kd_kamar = '"+kodeKamar+"',luas_kamar = '"+luasKamar+"', harga_bulanan= '"+biayaKamar+"' WHERE kd_kamar = '"+kodeKamar+"'";
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
@@ -89,4 +89,26 @@ public class KamarController {
         }
         return result;
     }
+    
+    public int cariKodeKamar(String kodeKamar) {
+        int result = 0;
+        
+        try {
+            KoneksiDB koneksi = new KoneksiDB();
+            conn = koneksi.getKoneksi();
+            Statement stt = (Statement) conn.createStatement();
+            sql = "SELECT * FROM `t_fasilitas` WHERE `kd_fasilitas` LIKE ='"+kodeKamar+"%' OR ";
+            result = stt.executeUpdate(sql);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+        
+        return result;
+    }
+
+    public int ubahData(String kodekam, String luaskamar, String harga, String p1) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
 }

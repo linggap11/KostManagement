@@ -3,8 +3,8 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 23, 2017 at 09:06 AM
--- Server version: 10.1.21-MariaDB
+-- Generation Time: 24 Jul 2017 pada 02.47
+-- Versi Server: 10.1.21-MariaDB
 -- PHP Version: 5.6.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -23,7 +23,7 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `det_fasilitas`
+-- Struktur dari tabel `det_fasilitas`
 --
 
 CREATE TABLE `det_fasilitas` (
@@ -33,7 +33,7 @@ CREATE TABLE `det_fasilitas` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `det_fasilitas`
+-- Dumping data untuk tabel `det_fasilitas`
 --
 
 INSERT INTO `det_fasilitas` (`kd_kamar`, `kd_fasilitas`, `total_biaya_tambahan`) VALUES
@@ -42,7 +42,7 @@ INSERT INTO `det_fasilitas` (`kd_kamar`, `kd_fasilitas`, `total_biaya_tambahan`)
 -- --------------------------------------------------------
 
 --
--- Table structure for table `det_transaksi`
+-- Struktur dari tabel `det_transaksi`
 --
 
 CREATE TABLE `det_transaksi` (
@@ -53,7 +53,7 @@ CREATE TABLE `det_transaksi` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `det_transaksi`
+-- Dumping data untuk tabel `det_transaksi`
 --
 
 INSERT INTO `det_transaksi` (`kd_transaksi`, `kd_pelanggan`, `total_bulan`, `total`) VALUES
@@ -65,7 +65,7 @@ INSERT INTO `det_transaksi` (`kd_transaksi`, `kd_pelanggan`, `total_bulan`, `tot
 
 --
 -- Stand-in structure for view `test`
--- (See below for the actual view)
+-- (Lihat di bawah untuk tampilan aktual)
 --
 CREATE TABLE `test` (
 `kd_transaksi` varchar(8)
@@ -76,7 +76,7 @@ CREATE TABLE `test` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `t_fasilitas`
+-- Struktur dari tabel `t_fasilitas`
 --
 
 CREATE TABLE `t_fasilitas` (
@@ -87,16 +87,18 @@ CREATE TABLE `t_fasilitas` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `t_fasilitas`
+-- Dumping data untuk tabel `t_fasilitas`
 --
 
 INSERT INTO `t_fasilitas` (`kd_fasilitas`, `nama`, `biaya_tambahan`, `stok`) VALUES
-('FAS-01', 'Bed', 0, 20);
+('FAS-01', 'Bed', 0, 20),
+('FAS-02', 'Meja Belajar', 0, 20),
+('FAS-03', 'Lemari Pakaian', 0, 20);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `t_kamar`
+-- Struktur dari tabel `t_kamar`
 --
 
 CREATE TABLE `t_kamar` (
@@ -109,18 +111,18 @@ CREATE TABLE `t_kamar` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `t_kamar`
+-- Dumping data untuk tabel `t_kamar`
 --
 
 INSERT INTO `t_kamar` (`kd_kamar`, `luas_kamar`, `harga_bulanan`, `tgl_habis`, `kd_pemilik`, `kd_pelanggan`) VALUES
 ('K-01', '3.5X2.5 M', 500000, '2017-07-25', 'P1', 'PEL0001'),
 ('K-02', '3.5X2.5 M', 500000, '2017-07-24', 'P1', 'PEL0002'),
-('K-03', '4.5X3.5 M', 750000, '2017-07-27', 'P1', 'PEL0003');
+('K-03', '4.5X3.5 M', 750000, '2017-07-27', 'P1', NULL);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `t_pelanggan`
+-- Struktur dari tabel `t_pelanggan`
 --
 
 CREATE TABLE `t_pelanggan` (
@@ -133,18 +135,18 @@ CREATE TABLE `t_pelanggan` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `t_pelanggan`
+-- Dumping data untuk tabel `t_pelanggan`
 --
 
 INSERT INTO `t_pelanggan` (`kd_pelanggan`, `nama_lengkap`, `jenis_kelamin`, `alamat_asal`, `pekerjaan`, `tgl_sewa`) VALUES
-('PEL0001', 'Lingga Pangestu', 'P', 'Jalan Cicabe ', 'Pelajar', '2017-06-25'),
+('PEL0001', 'Lingga Pangestu', 'P', 'Jalan Cicabe ', 'Pelajar', '2017-06-01'),
 ('PEL0002', 'M. Afif', 'W', 'Jl, Cinta citata No.1010011101 Bandung', 'Pelajar', '2017-06-24'),
 ('PEL0003', 'Insan Nasuha', 'W', 'Jl. Kita Bersama Selamanya No. 99FF Bandung', 'Pelajar', '2017-06-27');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `t_pemilik`
+-- Struktur dari tabel `t_pemilik`
 --
 
 CREATE TABLE `t_pemilik` (
@@ -157,7 +159,7 @@ CREATE TABLE `t_pemilik` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `t_pemilik`
+-- Dumping data untuk tabel `t_pemilik`
 --
 
 INSERT INTO `t_pemilik` (`kd_pemilik`, `nama_lengkap`, `no_telp`, `alamat`, `username`, `password`) VALUES
@@ -166,7 +168,7 @@ INSERT INTO `t_pemilik` (`kd_pemilik`, `nama_lengkap`, `no_telp`, `alamat`, `use
 -- --------------------------------------------------------
 
 --
--- Table structure for table `t_transaksi`
+-- Struktur dari tabel `t_transaksi`
 --
 
 CREATE TABLE `t_transaksi` (
@@ -176,7 +178,7 @@ CREATE TABLE `t_transaksi` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
 
 --
--- Dumping data for table `t_transaksi`
+-- Dumping data untuk tabel `t_transaksi`
 --
 
 INSERT INTO `t_transaksi` (`kd_transaksi`, `tgl_bayar`, `kd_pemilik`) VALUES
@@ -187,7 +189,7 @@ INSERT INTO `t_transaksi` (`kd_transaksi`, `tgl_bayar`, `kd_pemilik`) VALUES
 -- --------------------------------------------------------
 
 --
--- Structure for view `test`
+-- Struktur untuk view `test`
 --
 DROP TABLE IF EXISTS `test`;
 
@@ -245,32 +247,32 @@ ALTER TABLE `t_transaksi`
   ADD KEY `kd_pemilik` (`kd_pemilik`);
 
 --
--- Constraints for dumped tables
+-- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
 --
 
 --
--- Constraints for table `det_fasilitas`
+-- Ketidakleluasaan untuk tabel `det_fasilitas`
 --
 ALTER TABLE `det_fasilitas`
   ADD CONSTRAINT `det_fasilitas_ibfk_1` FOREIGN KEY (`kd_kamar`) REFERENCES `t_kamar` (`kd_kamar`),
   ADD CONSTRAINT `det_fasilitas_ibfk_2` FOREIGN KEY (`kd_fasilitas`) REFERENCES `t_fasilitas` (`kd_fasilitas`);
 
 --
--- Constraints for table `det_transaksi`
+-- Ketidakleluasaan untuk tabel `det_transaksi`
 --
 ALTER TABLE `det_transaksi`
   ADD CONSTRAINT `det_transaksi_ibfk_1` FOREIGN KEY (`kd_transaksi`) REFERENCES `t_transaksi` (`kd_transaksi`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `det_transaksi_ibfk_2` FOREIGN KEY (`kd_pelanggan`) REFERENCES `t_pelanggan` (`kd_pelanggan`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `t_kamar`
+-- Ketidakleluasaan untuk tabel `t_kamar`
 --
 ALTER TABLE `t_kamar`
   ADD CONSTRAINT `t_kamar_ibfk_1` FOREIGN KEY (`kd_pemilik`) REFERENCES `t_pemilik` (`kd_pemilik`),
   ADD CONSTRAINT `t_kamar_ibfk_2` FOREIGN KEY (`kd_pelanggan`) REFERENCES `t_pelanggan` (`kd_pelanggan`);
 
 --
--- Constraints for table `t_transaksi`
+-- Ketidakleluasaan untuk tabel `t_transaksi`
 --
 ALTER TABLE `t_transaksi`
   ADD CONSTRAINT `t_transaksi_ibfk_1` FOREIGN KEY (`kd_pemilik`) REFERENCES `t_pemilik` (`kd_pemilik`);

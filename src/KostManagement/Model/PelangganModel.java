@@ -6,16 +6,20 @@
 package KostManagement.Model;
 
 import KostManagement.KoneksiDB;
+import KostManagement.View.HalamanLogin;
+import KostManagement.View.HalamanUtama;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
 
 /**
  *
  * @author linggap
  */
-public class PelangganModel {
+public class PelangganModel extends HalamanUtama {
     private String kodePelanggan;
     
     public String setKodePelanggan() {
@@ -50,4 +54,28 @@ public class PelangganModel {
     public static boolean isBetween(int x, int lower, int upper) {
         return lower <= x && x <= upper;
     }
+    
+    public int setTanggalHabisDanKdPel(String kodePelanggan, String kodeKamar, int totalBulan) {
+        int result = 0;
+        
+        try {
+            KoneksiDB koneksi = new KoneksiDB();
+            Connection conn = koneksi.getKoneksi();
+            Statement stt = (Statement)conn.createStatement();
+            String tgl_habis = "";
+            String sql = "UPDATE `t_kamar` SET `tgl_habis` = (SELECT DATE_ADD(tgl_sewa, INTERVAL +'"+totalBulan+"' MONTH) FROM t_pelanggan "
+                    + "WHERE kd_pelanggan = '"+kodePelanggan+"') WHERE `kd_kamar` = '"+kodeKamar+"'";
+            result = stt.executeUpdate(sql);
+        } catch (Exception e) {
+        
+        }
+        return result;
+    }
+    
+     public String getFieldKode() {
+          String temp = tampilFieldKodePelanggan();
+          
+          return temp;
+    }
+    
 }

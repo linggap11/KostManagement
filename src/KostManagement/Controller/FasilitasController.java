@@ -45,7 +45,7 @@ public class FasilitasController {
         return model;
     }
     
-    public int tambahData(String kodeFasilitas, String nama, String biayaTambahan, int stok) {
+    public int tambahData(String kodeFasilitas, String nama, int biayaTambahan, int stok) {
         int result = 0;
         
         try {
@@ -91,6 +91,46 @@ public class FasilitasController {
         return result;
     }
     
+    public DefaultTableModel cariKodeFasilitas(String kodeFasilitas) {
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("Kode Fasilitas");
+        model.addColumn("Nama");
+        model.addColumn("Biaya Tambahan");
+        model.addColumn("Stock");
+        try {
+            KoneksiDB koneksi = new KoneksiDB();
+            conn = koneksi.getKoneksi();
+            Statement stt = (Statement) conn.createStatement();
+            sql = "SELECT * FROM `t_fasilitas` WHERE `kd_fasilitas` LIKE '"+kodeFasilitas+"%' ";
+            ResultSet result = stt.executeQuery(sql);
+            while (result.next()) {
+                model.addRow(new Object[] {
+                    result.getString(1),
+                    result.getString(2),
+                    result.getString(3),
+                    result.getString(4)
+                });
+            }
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+        
+        return model;
+    }
     
-    
+    public int cariNamaFasilitas(String namaFasilitas) {
+        int result = 0;
+        
+        try {
+            KoneksiDB koneksi = new KoneksiDB();
+            conn = koneksi.getKoneksi();
+            Statement stt = (Statement) conn.createStatement();
+            sql = "SELECT * FROM `t_fasilitas` WHERE `nama` LIKE '"+namaFasilitas+"'";
+            result = stt.executeUpdate(sql);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+        
+        return result;
+    }
 }

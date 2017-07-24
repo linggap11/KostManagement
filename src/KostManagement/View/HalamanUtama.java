@@ -5,16 +5,32 @@
  */
 package KostManagement.View;
 
+import FormEdit.Edit_Fasilitas;
+import FormEdit.Edit_kamar;
+import FormEdit.Edit_pelanggan;
+import KostManagement.Controller.FasilitasController;
 import KostManagement.Controller.KamarController;
 import KostManagement.Controller.PelangganController;
 import KostManagement.Controller.TransaksiController;
 import KostManagement.KoneksiDB;
 import KostManagement.Model.KamarModel;
 import KostManagement.Model.TransaksiModel;
+import KostManagement.View.FormTambah.Tambah_Kamar;
+import KostManagement.View.FormTambah.Tambah_fasilitas;
 import KostManagement.View.FormTambah.Tambah_pelanggan;
+import java.awt.Color;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import javax.swing.JOptionPane;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.design.JRDesignQuery;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -32,10 +48,22 @@ public class HalamanUtama extends javax.swing.JFrame {
         kamarPanel.hide();
         fasilitasPanel.hide();
         transaksiPanel.hide();
-        
+        jLabel2.setForeground(Color.yellow);
         tampilDataTransaksiTerakhir();
+        tampilDataTransaksi();
+        tammpilDataFasilitas();
+        tampildatakamar();
+        tampildatapelanggan();
+        
     }
-
+    
+    int row = 0;
+    public String tampilFieldKodePelanggan() {
+        row = tabelPelanggan.getSelectedColumn();
+        String kode = tableTransaksi2.getValueAt(row, 0).toString();
+        return kode;
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -94,11 +122,13 @@ public class HalamanUtama extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         tabelPelanggan = new javax.swing.JTable();
         jLabel15 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jLabel38 = new javax.swing.JLabel();
+        txt_cariData = new javax.swing.JTextField();
+        cariData = new javax.swing.JLabel();
         jLabel37 = new javax.swing.JLabel();
         jLabel39 = new javax.swing.JLabel();
         jLabel43 = new javax.swing.JLabel();
+        jLabel53 = new javax.swing.JLabel();
+        searchBy = new javax.swing.JComboBox<>();
         kamarPanel = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jLabel20 = new javax.swing.JLabel();
@@ -130,9 +160,11 @@ public class HalamanUtama extends javax.swing.JFrame {
         jLabel17 = new javax.swing.JLabel();
         jTextField3 = new javax.swing.JTextField();
         jLabel41 = new javax.swing.JLabel();
-        jLabel47 = new javax.swing.JLabel();
-        jLabel48 = new javax.swing.JLabel();
-        jLabel49 = new javax.swing.JLabel();
+        hapusFasilitas = new javax.swing.JLabel();
+        editFasilitas = new javax.swing.JLabel();
+        tambahFasilitas = new javax.swing.JLabel();
+        jLabel50 = new javax.swing.JLabel();
+        bycarifasilitas = new javax.swing.JComboBox<>();
         transaksiPanel = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         jLabel26 = new javax.swing.JLabel();
@@ -145,9 +177,8 @@ public class HalamanUtama extends javax.swing.JFrame {
         jScrollPane5 = new javax.swing.JScrollPane();
         tableTransaksi2 = new javax.swing.JTable();
         jLabel18 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
-        jLabel42 = new javax.swing.JLabel();
-        jLabel50 = new javax.swing.JLabel();
+        txt_cariKode = new javax.swing.JTextField();
+        cariKode = new javax.swing.JLabel();
         jLabel51 = new javax.swing.JLabel();
         jLabel52 = new javax.swing.JLabel();
 
@@ -205,16 +236,18 @@ public class HalamanUtama extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(20, Short.MAX_VALUE))
         );
         menu1Layout.setVerticalGroup(
             menu1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(menu1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, menu1Layout.createSequentialGroup()
                 .addContainerGap(13, Short.MAX_VALUE)
                 .addComponent(jLabel2)
                 .addContainerGap())
-            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         sidePane.add(menu1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 140, 250, 40));
@@ -401,7 +434,8 @@ public class HalamanUtama extends javax.swing.JFrame {
         tabelTransaksi1.setGridColor(new java.awt.Color(255, 255, 255));
         tabelTransaksi1.setIntercellSpacing(new java.awt.Dimension(5, 5));
         tabelTransaksi1.setRowHeight(24);
-        tabelTransaksi1.setSelectionBackground(new java.awt.Color(36, 47, 65));
+        tabelTransaksi1.setSelectionBackground(new java.awt.Color(51, 255, 255));
+        tabelTransaksi1.setSelectionForeground(new java.awt.Color(0, 0, 0));
         jScrollPane1.setViewportView(tabelTransaksi1);
         if (tabelTransaksi1.getColumnModel().getColumnCount() > 0) {
             tabelTransaksi1.getColumnModel().getColumn(0).setResizable(false);
@@ -565,14 +599,19 @@ public class HalamanUtama extends javax.swing.JFrame {
 
         pelangganPanel.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, 770, 190));
 
-        jLabel15.setText("Cari Kode Pelanggan");
-        pelangganPanel.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, -1, 20));
-        pelangganPanel.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 160, 120, -1));
+        jLabel15.setText("Menurut");
+        pelangganPanel.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 160, -1, 20));
+        pelangganPanel.add(txt_cariData, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 160, 120, -1));
 
-        jLabel38.setIcon(new javax.swing.ImageIcon(getClass().getResource("/DataGambar/icons8_Search_15px_1.png"))); // NOI18N
-        jLabel38.setToolTipText("Cari");
-        jLabel38.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        pelangganPanel.add(jLabel38, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 160, 20, 20));
+        cariData.setIcon(new javax.swing.ImageIcon(getClass().getResource("/DataGambar/icons8_Search_15px_1.png"))); // NOI18N
+        cariData.setToolTipText("Cari");
+        cariData.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        cariData.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cariDataMouseClicked(evt);
+            }
+        });
+        pelangganPanel.add(cariData, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 160, 20, 20));
 
         jLabel37.setIcon(new javax.swing.ImageIcon(getClass().getResource("/DataGambar/icons8_Plus_30px.png"))); // NOI18N
         jLabel37.setToolTipText("Tambah");
@@ -587,12 +626,28 @@ public class HalamanUtama extends javax.swing.JFrame {
         jLabel39.setIcon(new javax.swing.ImageIcon(getClass().getResource("/DataGambar/icons8_Edit_Property_30px.png"))); // NOI18N
         jLabel39.setToolTipText("Edit");
         jLabel39.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel39.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel39MouseClicked(evt);
+            }
+        });
         pelangganPanel.add(jLabel39, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 400, 40, 30));
 
         jLabel43.setIcon(new javax.swing.ImageIcon(getClass().getResource("/DataGambar/icons8_Trash_30px.png"))); // NOI18N
         jLabel43.setToolTipText("Hapus");
         jLabel43.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         pelangganPanel.add(jLabel43, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 400, -1, -1));
+
+        jLabel53.setText("Cari Pelanggan");
+        pelangganPanel.add(jLabel53, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, -1, 20));
+
+        searchBy.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Kode", "Nama" }));
+        searchBy.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchByActionPerformed(evt);
+            }
+        });
+        pelangganPanel.add(searchBy, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 160, -1, -1));
 
         bg.add(pelangganPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 0, 790, 470));
 
@@ -664,7 +719,7 @@ public class HalamanUtama extends javax.swing.JFrame {
 
         kamarPanel.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, 770, 190));
 
-        jLabel16.setText("Cari Kode Pelanggan");
+        jLabel16.setText("Cari Kode Kamar");
         kamarPanel.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, -1, 20));
         kamarPanel.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 160, 120, -1));
 
@@ -676,16 +731,31 @@ public class HalamanUtama extends javax.swing.JFrame {
         jLabel44.setIcon(new javax.swing.ImageIcon(getClass().getResource("/DataGambar/icons8_Trash_30px.png"))); // NOI18N
         jLabel44.setToolTipText("Hapus");
         jLabel44.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel44.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel44MouseClicked(evt);
+            }
+        });
         kamarPanel.add(jLabel44, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 400, -1, -1));
 
         jLabel45.setIcon(new javax.swing.ImageIcon(getClass().getResource("/DataGambar/icons8_Edit_Property_30px.png"))); // NOI18N
         jLabel45.setToolTipText("Edit");
         jLabel45.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel45.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel45MouseClicked(evt);
+            }
+        });
         kamarPanel.add(jLabel45, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 400, 40, 30));
 
         jLabel46.setIcon(new javax.swing.ImageIcon(getClass().getResource("/DataGambar/icons8_Plus_30px.png"))); // NOI18N
         jLabel46.setToolTipText("Tambah");
         jLabel46.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel46.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel46MouseClicked(evt);
+            }
+        });
         kamarPanel.add(jLabel46, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 390, 30, 50));
 
         bg.add(kamarPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 0, 790, 470));
@@ -758,29 +828,50 @@ public class HalamanUtama extends javax.swing.JFrame {
 
         fasilitasPanel.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, 770, 190));
 
-        jLabel17.setText("Cari Kode Pelanggan");
-        fasilitasPanel.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, -1, 20));
-        fasilitasPanel.add(jTextField3, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 160, 120, -1));
+        jLabel17.setText("Menurut");
+        fasilitasPanel.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 160, -1, 20));
+        fasilitasPanel.add(jTextField3, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 160, 120, -1));
 
         jLabel41.setIcon(new javax.swing.ImageIcon(getClass().getResource("/DataGambar/icons8_Search_15px_1.png"))); // NOI18N
         jLabel41.setToolTipText("Cari");
         jLabel41.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        fasilitasPanel.add(jLabel41, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 160, 20, 20));
+        jLabel41.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel41MouseClicked(evt);
+            }
+        });
+        fasilitasPanel.add(jLabel41, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 160, 20, 20));
 
-        jLabel47.setIcon(new javax.swing.ImageIcon(getClass().getResource("/DataGambar/icons8_Trash_30px.png"))); // NOI18N
-        jLabel47.setToolTipText("Hapus");
-        jLabel47.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        fasilitasPanel.add(jLabel47, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 400, -1, -1));
+        hapusFasilitas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/DataGambar/icons8_Trash_30px.png"))); // NOI18N
+        hapusFasilitas.setToolTipText("Hapus");
+        hapusFasilitas.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        fasilitasPanel.add(hapusFasilitas, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 400, -1, -1));
 
-        jLabel48.setIcon(new javax.swing.ImageIcon(getClass().getResource("/DataGambar/icons8_Edit_Property_30px.png"))); // NOI18N
-        jLabel48.setToolTipText("Edit");
-        jLabel48.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        fasilitasPanel.add(jLabel48, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 400, 40, 30));
+        editFasilitas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/DataGambar/icons8_Edit_Property_30px.png"))); // NOI18N
+        editFasilitas.setToolTipText("Edit");
+        editFasilitas.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        editFasilitas.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                editFasilitasMouseClicked(evt);
+            }
+        });
+        fasilitasPanel.add(editFasilitas, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 400, 40, 30));
 
-        jLabel49.setIcon(new javax.swing.ImageIcon(getClass().getResource("/DataGambar/icons8_Plus_30px.png"))); // NOI18N
-        jLabel49.setToolTipText("Tambah");
-        jLabel49.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        fasilitasPanel.add(jLabel49, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 390, 30, 50));
+        tambahFasilitas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/DataGambar/icons8_Plus_30px.png"))); // NOI18N
+        tambahFasilitas.setToolTipText("Tambah");
+        tambahFasilitas.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        tambahFasilitas.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tambahFasilitasMouseClicked(evt);
+            }
+        });
+        fasilitasPanel.add(tambahFasilitas, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 390, 30, 50));
+
+        jLabel50.setText("Cari Fasilitas");
+        fasilitasPanel.add(jLabel50, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, -1, 20));
+
+        bycarifasilitas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Kode", "Nama" }));
+        fasilitasPanel.add(bycarifasilitas, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 160, -1, -1));
 
         bg.add(fasilitasPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 0, 790, 470));
 
@@ -852,29 +943,28 @@ public class HalamanUtama extends javax.swing.JFrame {
 
         transaksiPanel.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, 770, 190));
 
-        jLabel18.setText("Cari Kode Pelanggan");
+        jLabel18.setText("Cari Kode Transaksi");
         transaksiPanel.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, -1, 20));
-        transaksiPanel.add(jTextField4, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 160, 120, -1));
+        transaksiPanel.add(txt_cariKode, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 160, 120, -1));
 
-        jLabel42.setIcon(new javax.swing.ImageIcon(getClass().getResource("/DataGambar/icons8_Search_15px_1.png"))); // NOI18N
-        jLabel42.setToolTipText("Cari");
-        jLabel42.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        transaksiPanel.add(jLabel42, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 160, 20, 20));
+        cariKode.setIcon(new javax.swing.ImageIcon(getClass().getResource("/DataGambar/icons8_Search_15px_1.png"))); // NOI18N
+        cariKode.setToolTipText("Cari");
+        cariKode.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        transaksiPanel.add(cariKode, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 160, 20, 20));
 
-        jLabel50.setIcon(new javax.swing.ImageIcon(getClass().getResource("/DataGambar/icons8_Trash_30px.png"))); // NOI18N
-        jLabel50.setToolTipText("Hapus");
-        jLabel50.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        transaksiPanel.add(jLabel50, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 400, -1, -1));
+        jLabel51.setIcon(new javax.swing.ImageIcon(getClass().getResource("/DataGambar/icons8_Trash_30px.png"))); // NOI18N
+        jLabel51.setToolTipText("Hapus");
+        transaksiPanel.add(jLabel51, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 400, -1, -1));
 
-        jLabel51.setIcon(new javax.swing.ImageIcon(getClass().getResource("/DataGambar/icons8_Edit_Property_30px.png"))); // NOI18N
-        jLabel51.setToolTipText("Edit");
-        jLabel51.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        transaksiPanel.add(jLabel51, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 400, 40, 30));
-
-        jLabel52.setIcon(new javax.swing.ImageIcon(getClass().getResource("/DataGambar/icons8_Plus_30px.png"))); // NOI18N
-        jLabel52.setToolTipText("Tambah");
+        jLabel52.setIcon(new javax.swing.ImageIcon(getClass().getResource("/DataGambar/icons8_Print_30px.png"))); // NOI18N
+        jLabel52.setToolTipText("Cetak");
         jLabel52.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        transaksiPanel.add(jLabel52, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 390, 30, 50));
+        jLabel52.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel52MouseClicked(evt);
+            }
+        });
+        transaksiPanel.add(jLabel52, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 400, -1, -1));
 
         bg.add(transaksiPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 0, 790, 470));
 
@@ -901,6 +991,23 @@ public class HalamanUtama extends javax.swing.JFrame {
         tglTerakhir.setText(transaksiModel.setTanggalTerakhir());
         tabelTransaksi1.setModel(transaksiCont.tampilDataTerakhir());
         notifikasi();
+    }
+    void tampilDataTransaksi() {
+        TransaksiController transaksi = new TransaksiController();
+        tableTransaksi2.setModel(transaksi.tampilSemuaData());
+    }
+    
+    void tammpilDataFasilitas() {
+        FasilitasController fasilitas = new FasilitasController();
+        tabelFasilitas.setModel(fasilitas.tampilData());
+    }
+    public void tampildatakamar(){
+        KamarController kamar = new KamarController();
+        TableKamar2.setModel(kamar.tampilData());
+    }
+    void tampildatapelanggan(){
+        PelangganController pel = new PelangganController();
+        tabelPelanggan.setModel(pel.tampilData());
     }
     void notifikasi() {
         KamarModel kmrModel = new KamarModel();
@@ -952,7 +1059,11 @@ public class HalamanUtama extends javax.swing.JFrame {
         kamarPanel.hide();
         fasilitasPanel.hide();
         transaksiPanel.hide();
-        
+        jLabel6.setForeground(Color.yellow);
+        jLabel2.setForeground(Color.white);
+        jLabel4.setForeground(Color.white);
+        jLabel14.setForeground(Color.white);
+        jLabel8.setForeground(Color.white);
     }//GEN-LAST:event_menu2MouseClicked
 
     private void menu3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menu3MouseClicked
@@ -961,6 +1072,11 @@ public class HalamanUtama extends javax.swing.JFrame {
         kamarPanel.show();
         fasilitasPanel.hide();
         transaksiPanel.hide();
+        jLabel8.setForeground(Color.yellow);
+        jLabel2.setForeground(Color.white);
+        jLabel6.setForeground(Color.white);
+        jLabel4.setForeground(Color.white);
+        jLabel14.setForeground(Color.white);
     }//GEN-LAST:event_menu3MouseClicked
 
     private void menu4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menu4MouseClicked
@@ -969,6 +1085,11 @@ public class HalamanUtama extends javax.swing.JFrame {
         kamarPanel.hide();
         fasilitasPanel.show();
         transaksiPanel.hide();
+        jLabel4.setForeground(Color.yellow);
+        jLabel2.setForeground(Color.white);
+        jLabel6.setForeground(Color.white);
+        jLabel14.setForeground(Color.white);
+        jLabel8.setForeground(Color.white);
     }//GEN-LAST:event_menu4MouseClicked
 
     private void menu5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menu5MouseClicked
@@ -977,6 +1098,11 @@ public class HalamanUtama extends javax.swing.JFrame {
         kamarPanel.hide();
         fasilitasPanel.hide();
         transaksiPanel.show();
+        jLabel14.setForeground(Color.yellow);
+        jLabel2.setForeground(Color.white);
+        jLabel4.setForeground(Color.white);
+        jLabel6.setForeground(Color.white);
+        jLabel8.setForeground(Color.white);
     }//GEN-LAST:event_menu5MouseClicked
 
     private void menu1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menu1MouseClicked
@@ -985,12 +1111,110 @@ public class HalamanUtama extends javax.swing.JFrame {
         kamarPanel.hide();
         fasilitasPanel.hide();
         transaksiPanel.hide();
+        jLabel2.setForeground(Color.yellow);
+        jLabel14.setForeground(Color.white);
+        jLabel4.setForeground(Color.white);
+        jLabel6.setForeground(Color.white);
+        jLabel8.setForeground(Color.white);
     }//GEN-LAST:event_menu1MouseClicked
 
     private void jLabel37MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel37MouseClicked
         new Tambah_pelanggan().setVisible(true);   // TODO add your handling code here:
     }//GEN-LAST:event_jLabel37MouseClicked
 
+    private void searchByActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchByActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_searchByActionPerformed
+
+    private void jLabel39MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel39MouseClicked
+        // TODO add your handling code here:
+        new Edit_pelanggan().setVisible(true);
+    }//GEN-LAST:event_jLabel39MouseClicked
+
+    private void jLabel45MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel45MouseClicked
+new Edit_kamar().setVisible(true);        // TODO add your handling code here:
+    }//GEN-LAST:event_jLabel45MouseClicked
+
+    private void editFasilitasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_editFasilitasMouseClicked
+new Edit_Fasilitas().setVisible(true);        // TODO add your handling code here:
+    }//GEN-LAST:event_editFasilitasMouseClicked
+
+    private void jLabel46MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel46MouseClicked
+        // TODO add your handling code here:
+        new Tambah_Kamar().setVisible(true);
+    }//GEN-LAST:event_jLabel46MouseClicked
+
+    private void tambahFasilitasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tambahFasilitasMouseClicked
+        new Tambah_fasilitas().setVisible(true);        // TODO add your handling code here:
+    }//GEN-LAST:event_tambahFasilitasMouseClicked
+
+    private void jLabel52MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel52MouseClicked
+        
+        try {
+            KoneksiDB koneksi = new KoneksiDB();
+            Connection conn = koneksi.getKoneksi();
+            JasperDesign jd = JRXmlLoader.load("D:\\Netbeans_Project\\KostManagement-master\\Transaksi.jrxml");
+            String sql = "SELECT `t_transaksi`.`kd_transaksi` , `t_transaksi`.`tgl_bayar` , `t_pelanggan`.`nama_lengkap` , `det_transaksi`.`total` FROM `det_transaksi` INNER JOIN `t_transaksi` ON (`det_transaksi`.`kd_transaksi` = `t_transaksi`.`kd_transaksi`) INNER JOIN `t_pelanggan` ON (`det_transaksi`.`kd_pelanggan` = `t_pelanggan`.`kd_pelanggan`)"
+                    + "WHERE  t_transaksi.kd_transaksi = '"+getKodeTransaksi()+"'";
+
+            JRDesignQuery JRD = new JRDesignQuery();
+            JRD.setText(sql);
+            jd.setQuery(JRD);
+            JasperReport jr = JasperCompileManager.compileReport(jd);
+            JasperPrint jp = JasperFillManager.fillReport(jr, null, conn);
+            JasperViewer.viewReport(jp);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+    }//GEN-LAST:event_jLabel52MouseClicked
+
+    private void jLabel41MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel41MouseClicked
+        String kodeFasilitas = txt_cariKode.getText();
+        
+        FasilitasController cariKode = new FasilitasController();
+        
+        if (bycarifasilitas.getSelectedItem() == "Kode") {
+            cariKode.cariKodeFasilitas(kodeFasilitas);
+        }
+        tabelFasilitas.setModel(cariKode.cariKodeFasilitas(kodeFasilitas));
+    }//GEN-LAST:event_jLabel41MouseClicked
+
+    private void jLabel44MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel44MouseClicked
+        
+        
+    }//GEN-LAST:event_jLabel44MouseClicked
+
+    private void cariDataMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cariDataMouseClicked
+        String cari = txt_cariData.getText();
+        PelangganController cariPelanggan = new PelangganController();
+        
+        if (searchBy.getSelectedItem() == "Kode") {
+            cariPelanggan.cariKodePelanggan(cari);
+        }
+    }//GEN-LAST:event_cariDataMouseClicked
+    
+   
+    public String getKodeTransaksi() {
+        row = tableTransaksi2.getSelectedColumn();
+        String kodeTransaksi = tableTransaksi2.getValueAt(row, 0).toString();
+        return kodeTransaksi;
+    }
+     int rowkamar = 0;
+    public String getKodeKamar() {
+        row = TableKamar2.getSelectedColumn();
+        String kodekamar = TableKamar2.getValueAt(row, 0).toString();
+        return kodekamar;
+    }
+   // public String getluaskamar() {
+      //  rowkamar = TableKamar2.getSelectedColumn();
+      //  String luas = TableKamar2.getValueAt(rowkamar, 1).toString();
+      //  return luas;
+  //  }
+   /// public String getHargaKamar() {
+      //  rowkamar = TableKamar2.getSelectedColumn();
+       // String Harga = TableKamar2.getValueAt(rowkamar, 2).toString();
+       // return Harga;
+    //}
     /**
      * @param args the command line arguments
      */
@@ -1019,10 +1243,8 @@ public class HalamanUtama extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new HalamanUtama().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new HalamanUtama().setVisible(true);
         });
     }
 
@@ -1034,8 +1256,13 @@ public class HalamanUtama extends javax.swing.JFrame {
     private javax.swing.JLabel Close4;
     private javax.swing.JTable TableKamar2;
     private javax.swing.JPanel bg;
+    private javax.swing.JComboBox<String> bycarifasilitas;
+    private javax.swing.JLabel cariData;
+    private javax.swing.JLabel cariKode;
+    private javax.swing.JLabel editFasilitas;
     private javax.swing.JPanel fasilitasPanel;
     private javax.swing.JPanel halamanUtamaPanel;
+    private javax.swing.JLabel hapusFasilitas;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1067,23 +1294,19 @@ public class HalamanUtama extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel35;
     private javax.swing.JLabel jLabel36;
     private javax.swing.JLabel jLabel37;
-    private javax.swing.JLabel jLabel38;
     private javax.swing.JLabel jLabel39;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel40;
     private javax.swing.JLabel jLabel41;
-    private javax.swing.JLabel jLabel42;
     private javax.swing.JLabel jLabel43;
     private javax.swing.JLabel jLabel44;
     private javax.swing.JLabel jLabel45;
     private javax.swing.JLabel jLabel46;
-    private javax.swing.JLabel jLabel47;
-    private javax.swing.JLabel jLabel48;
-    private javax.swing.JLabel jLabel49;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel50;
     private javax.swing.JLabel jLabel51;
     private javax.swing.JLabel jLabel52;
+    private javax.swing.JLabel jLabel53;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -1107,10 +1330,8 @@ public class HalamanUtama extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator13;
     private javax.swing.JSeparator jSeparator8;
     private javax.swing.JSeparator jSeparator9;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
     private javax.swing.JPanel kamarPanel;
     private javax.swing.JLabel logokostan;
     private javax.swing.JLabel logokostan5;
@@ -1125,12 +1346,20 @@ public class HalamanUtama extends javax.swing.JFrame {
     private javax.swing.JTextArea notif;
     private javax.swing.JPanel notifikasi;
     private javax.swing.JPanel pelangganPanel;
+    private javax.swing.JComboBox<String> searchBy;
     private javax.swing.JPanel sidePane;
     private javax.swing.JTable tabelFasilitas;
     private javax.swing.JTable tabelPelanggan;
     private javax.swing.JTable tabelTransaksi1;
     private javax.swing.JTable tableTransaksi2;
+    private javax.swing.JLabel tambahFasilitas;
     private javax.swing.JLabel tglTerakhir;
     private javax.swing.JPanel transaksiPanel;
+    private javax.swing.JTextField txt_cariData;
+    private javax.swing.JTextField txt_cariKode;
     // End of variables declaration//GEN-END:variables
+
+    public void getClass(KamarController kamar) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

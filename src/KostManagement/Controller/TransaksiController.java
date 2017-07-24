@@ -80,4 +80,25 @@ public class TransaksiController {
         }
         return model;
     }
+    
+    public int cariKodeTransaksi(String kodeTransaksi) {
+        int result = 0;
+        
+        try {
+            KoneksiDB koneksi = new KoneksiDB();
+            conn = koneksi.getKoneksi();
+            Statement stt = (Statement) conn.createStatement();
+            sql = "SELECT `t_transaksi`.`kd_transaksi` , `t_transaksi`.`tgl_bayar` , `t_pelanggan`.`nama_lengkap` , `det_transaksi`.`total` "
+                    + "FROM `det_transaksi` "
+                    + "INNER JOIN `t_transaksi` ON (`det_transaksi`.`kd_transaksi` = `t_transaksi`.`kd_transaksi`)"
+                    + "INNER JOIN `t_pelanggan` ON (`det_transaksi`.`kd_pelanggan` = `t_pelanggan`.`kd_pelanggan`)"
+                    + "WHERE t_transaksi.kd_transaksi LIKE '"+kodeTransaksi+"'%"
+                    + "ORDER BY kd_transaksi DESC";
+            result = stt.executeUpdate(sql);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+        
+        return result;
+    }
 }

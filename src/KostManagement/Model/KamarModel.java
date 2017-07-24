@@ -40,7 +40,7 @@ public class KamarModel {
     }
     
     public String[] setNotifikasi() {
-         String[] ket = new String[100];
+        String[] ket = new String[100];
         int i = 0;
         try {
             KoneksiDB koneksi = new KoneksiDB();

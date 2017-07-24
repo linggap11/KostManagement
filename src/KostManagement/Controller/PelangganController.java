@@ -9,6 +9,9 @@ import KostManagement.KoneksiDB;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import javax.swing.JLabel;
+import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -92,4 +95,70 @@ public class PelangganController {
         }
         return result;
     }
+    
+    public DefaultTableModel cariKodePelanggan(String kodePelanggan) {
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("Kode Pelanggan");
+        model.addColumn("Nama Lengkap");
+        model.addColumn("JK");
+        model.addColumn("Alamat");
+        model.addColumn("Pekerjaan");
+        
+        try {
+            KoneksiDB koneksi = new KoneksiDB();
+            conn = koneksi.getKoneksi();
+            Statement stt = (Statement) conn.createStatement();
+            sql = "SELECT * FROM `t_pelanggan` WHERE kd_pelanggan LIKE '"+kodePelanggan+"'%";
+            ResultSet result = stt.executeQuery(sql);
+            
+            while (result.next()) {                
+                model.addRow(new Object[] {
+                    result.getString(1),
+                    result.getString(2),
+                    result.getString(3),
+                    result.getString(4),
+                    result.getString(5)
+                });
+            }
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+        
+        return model;
+    }
+    
+    public DefaultTableModel cariNamaPelanggan(String namaPelanggan) {
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("Kode Pelanggan");
+        model.addColumn("Nama Lengkap");
+        model.addColumn("JK");
+        model.addColumn("Alamat");
+        model.addColumn("Pekerjaan");
+        
+        try {
+            KoneksiDB koneksi = new KoneksiDB();
+            conn = koneksi.getKoneksi();
+            Statement stt = (Statement) conn.createStatement();
+            sql = "SELECT * FROM `t_pelanggan` WHERE kd_pelanggan LIKE '"+namaPelanggan+"%'";
+            ResultSet result = stt.executeQuery(sql);
+            
+            while (result.next()) {                
+                model.addRow(new Object[] {
+                    result.getString(1),
+                    result.getString(2),
+                    result.getString(3),
+                    result.getString(4),
+                    result.getString(5)
+                });
+            }
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+        
+        return model;
+        
+    }
+    
+   
+    
 }
